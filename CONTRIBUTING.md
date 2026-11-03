@@ -4,34 +4,86 @@
 
 Four contributors total:
 
-1. **Project lead / integration (you):** architecture, product decisions, reviews, release coordination, and final integration.
+1. **Project lead / integration (Aariso0):** Architecture, product decisions, PR reviews, release coordination, and final integration.
 2. **Frontend contributor:** React UI, onboarding, delegated-user screens, shopping, and approval experience.
 3. **Backend / PayPal contributor:** Node.js APIs, data model, identity, authorization, notifications, and PayPal API feasibility/payment adapter.
-4. **AI agent contributor:** product discovery, comparison, structured purchase-intent orchestration, and safety testing.
+4. **AI agent contributor:** Product discovery, comparison, structured purchase-intent orchestration, and safety testing.
+
+## Repository structure
+
+- **Upstream repository:** `Aariso0/BuyPal` (canonical repository).
+- **Default branch:** `main`.
+- **Contribution method:** Fork + Pull Request.
+- Contributors work from their own GitHub forks. Direct collaborator access is not required.
 
 ## Assigned branches
 
-- Project lead: `main` (integration only; do not develop directly on main)
+Each contributor should create their own fork of `Aariso0/BuyPal` and maintain the following branches in their fork:
+
+- Project lead: `main` (integration and release management; do not develop directly on main).
 - Frontend: `feature/frontend`
 - Backend / PayPal: `feature/backend-payments`
 - AI agent: `feature/ai-agent`
 
-For additional work use `docs/<short-topic>` or `fix/<short-topic>`.
+For additional work use `docs/<short-topic>`, `fix/<short-topic>`, or `feature/<short-topic>`.
+
+Branch names are conventions, not shared branches in the upstream repository.
 
 ## Workflow
 
-1. Pull the latest `main`.
-2. Create or switch to your assigned branch.
-3. Make focused changes and run tests.
-4. Commit with a clear message (e.g. `feat: add delegated-user invitation screen`).
-5. Push your branch and open a PR targeting `main`.
-6. Link related issues and describe tests, risks, and screenshots where relevant.
-7. Request review from the project lead or relevant owner.
-8. Merge only after approval and required checks pass.
+1. Fork `Aariso0/BuyPal` into your own GitHub account.
+2. Clone your fork locally.
+3. Add the original repository as the `upstream` remote.
+4. Fetch the latest upstream changes.
+5. Create or switch to your assigned feature branch.
+6. Make focused changes and run tests.
+7. Commit with a clear message (e.g. `feat: add delegated-user invitation screen`).
+8. Push your feature branch to your own fork.
+9. Open a Pull Request targeting `Aariso0/BuyPal:main`.
+10. Link related issues and describe tests, risks, and screenshots where relevant.
+11. Request review from the project lead or relevant owner.
+12. Address requested changes and update your PR.
+13. The project lead reviews and merges the PR after approval and required checks pass.
+
+## Git remote setup
+
+After cloning your fork, configure the original repository as upstream:
+
+```bash
+git remote add upstream https://github.com/Aariso0/BuyPal.git
+```
+
+Your remotes should look like:
+
+- `origin` → your personal fork.
+- `upstream` → `Aariso0/BuyPal`.
+
+To synchronize your local main branch:
+
+```bash
+git fetch upstream
+git switch main
+git merge upstream/main
+git push origin main
+```
+
+Create a feature branch:
+
+```bash
+git switch -c feature/your-feature
+```
+
+Push it to your fork:
+
+```bash
+git push -u origin feature/your-feature
+```
 
 ## Rules
 
-- Do not push directly to `main`.
+- Do not push directly to the upstream `main`.
+- Do not attempt to bypass the PR review process.
+- Only the project lead or explicitly authorized maintainers merge PRs.
 - Do not commit `.env`, API keys, OAuth tokens, private keys, or customer data.
 - Add new configuration keys to `.env.example` with dummy values only.
 - Keep payment authorization on the server.
@@ -39,7 +91,33 @@ For additional work use `docs/<short-topic>` or `fix/<short-topic>`.
 - Every checkout action must be checked against server-side user consent and policy.
 - Ask before changing shared API contracts or database schemas.
 - Keep PRs small and update docs/tests with behavior changes.
+- Keep your fork synchronized with the upstream repository before starting significant new work.
+
+## Pull Request requirements
+
+Every PR should include:
+
+- A clear description of the change.
+- Related issue number, if applicable.
+- Testing performed and results.
+- Screenshots for UI changes.
+- Security or payment-related implications, if applicable.
+- Any API, database, or configuration changes.
+
+PRs may be rejected or sent back for changes if they introduce breaking behavior, bypass authorization checks, or do not meet project standards.
 
 ## Local setup
 
 Setup commands will be added when the frontend/backend package structure is committed. Until then, coordinate runtime and package choices in the project discussion and record decisions in `docs/DECISIONS.md`.
+
+## Maintainer authority
+
+The project lead (Aariso0) is responsible for:
+
+- Reviewing all incoming PRs.
+- Approving or requesting changes.
+- Maintaining the canonical repository.
+- Protecting the integrity of the `main` branch.
+- Coordinating releases and project-wide changes.
+
+All contributions must be merged through the upstream repository's PR process.
