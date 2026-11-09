@@ -5,34 +5,37 @@ An autonomous e-commerce intelligence microservice powered by Groq Cloud (LPU), 
 
 ## Architecture & Workflow
 
-[User Natural Language Prompt] 
-       │
-       ▼
- [FastAPI /api/ai/search] ──> [Groq LPU Intent Parser]
-                                     │
-                                     ▼
-                          [Rust Agent Browser CLI] 
-                          (Scrapes Live DOM & Images)
-                                     │
-                                     ▼
-                           [Groq LPU Evaluator] 
-                           (Ranks & Validates Budget)
-                                     │
-                                     ▼
-                        [Structured JSON Response]
-
+```text
+[User Natural Language Prompt]
+          |
+          v
+[FastAPI /api/ai/search] ---> [Groq LPU Intent Parser]
+                                      |
+                                      v
+                              [Rust Agent Browser CLI]
+                              (Scrapes Live DOM & Images)
+                                      |
+                                      v
+                              [Groq LPU Evaluator]
+                              (Ranks & Validates Budget)
+                                      |
+                                      v
+                              [Structured JSON Response]
+```
 
 
 ## Project Structure
 
+```text
 ai_agent_service/
-├── .env.example             # Template for required environment variables
-├── .gitignore               # Excludes secrets, caches, and virtual environments
-├── requirements.txt         # Python package dependencies
-├── schemas.py               # Pydantic data models & contracts
-├── browser.py               # Wrapper interface for the Rust agent-browser CLI
-├── agent.py                 # Core AI intelligence & inference pipeline
-└── main.py                  # FastAPI server endpoints & local execution harness
+├── .env.example          # Template for required environment variables
+├── .gitignore            # Excludes secrets, caches, and virtual environments
+├── requirements.txt      # Python package dependencies
+├── schemas.py            # Pydantic data models & contracts
+├── browser.py            # Wrapper interface for the Rust agent-browser CLI
+├── agent.py              # Core AI intelligence & inference pipeline
+└── main.py               # FastAPI server endpoints & local execution harness
+```
 
 
 
