@@ -1,0 +1,5 @@
+BuyPal Core Backend package
+Source snapshot: Shivashish-IT/BuyPal, feature/backend-paypal-circle (reviewed 2026-11-05)
+Scope: authentication, MongoDB, Circles, purchase approvals, PayPal Sandbox checkout/webhooks.
+AI shopping, LLM, product search and retailer integrations are intentionally excluded.
+No GitHub write operations were performed to create this ZIP.
