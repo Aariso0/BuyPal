@@ -1,0 +1,4 @@
+import mongoose from 'mongoose';
+const schema=new mongoose.Schema({reference:{type:String,required:true,unique:true},type:{type:String,enum:['TRANSFER','ADMIN_CREDIT','PAYPAL_SANDBOX_TOPUP'],required:true},status:{type:String,enum:['COMPLETED'],default:'COMPLETED'},fromUserId:{type:mongoose.Schema.Types.ObjectId,ref:'User',default:null},toUserId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},amountMinor:{type:Number,required:true,min:1},currency:{type:String,default:'USD',enum:['USD','INR','CREDITS']},note:{type:String,maxlength:160,default:''},createdBy:{type:mongoose.Schema.Types.ObjectId,ref:'User',default:null}},{timestamps:true,versionKey:false});
+schema.index({fromUserId:1,createdAt:-1});schema.index({toUserId:1,createdAt:-1});
+export const WalletTransaction=mongoose.models.WalletTransaction||mongoose.model('WalletTransaction',schema);
