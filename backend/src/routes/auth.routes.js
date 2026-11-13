@@ -8,7 +8,7 @@ import { PasswordResetToken } from '../models/PasswordResetToken.js';
 import { sendPasswordResetEmail, isMailConfigured } from '../utils/mailer.js';
 import { env } from '../config/env.js';
 import { asyncHandler } from '../utils/async-handler.js';
-import { createSessionToken, hashSessionToken, sessionCookieOptions } from '../utils/session.js';
+import { createSessionToken, hashSessionToken, sessionCookieOptions, clearSessionCookieOptions } from '../utils/session.js';
 import { requireAuth } from '../middleware/require-auth.js';
 const router = Router();
 const credentials = z.object({ email: z.string().trim().email().max(254).transform(v => v.toLowerCase()), password: z.string().min(8).max(128) });
@@ -80,7 +80,7 @@ router.post('/reset-password', asyncHandler(async (req, res) => {
 router.post('/logout', asyncHandler(async (req, res) => {
   const token = req.cookies?.[env.cookieName];
   if (token) await Session.deleteOne({ tokenHash: hashSessionToken(token) });
-  res.clearCookie(env.cookieName, { httpOnly: true, secure: env.isProduction, sameSite: 'lax', path: '/' });
+  res.clearCookie(env.cookieName, clearSessionCookieOptions);
   return res.status(204).end();
 }));
 router.get('/session', requireAuth, (req, res) => res.json({ user: { id: req.user.id, email: req.user.email, name: req.user.display_name } }));

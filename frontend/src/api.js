@@ -1,4 +1,6 @@
-const API = import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+const DEV_API_URL = "http://localhost:4000/api/v1";
+const API = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? DEV_API_URL : "")).replace(/\/+$/, "");
+if (!API) throw new Error("VITE_API_URL is not set. Set it to your backend base URL (for example https://buypal-api.example.com/api/v1) before building for production.");
 async function request(path, options = {}) {
   const response = await fetch(`${API}${path}`, {
     ...options,

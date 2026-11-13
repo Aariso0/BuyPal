@@ -14,7 +14,7 @@ export const app=express();
 app.disable('x-powered-by');
 app.set('trust proxy',env.isProduction?1:false);
 app.use(helmet());
-app.use(cors({origin:env.frontendOrigin,credentials:true,methods:['GET','POST','PATCH','DELETE','OPTIONS'],allowedHeaders:['Content-Type','Idempotency-Key']}));
+app.use(cors({origin:env.frontendOrigins,credentials:true,methods:['GET','POST','PATCH','DELETE','OPTIONS'],allowedHeaders:['Content-Type','Idempotency-Key']}));
 app.use(express.json({limit:'32kb'}));
 app.use(cookieParser());
 app.get('/health',(_req,res)=>res.json({status:'ok',service:'buypal-api'}));
