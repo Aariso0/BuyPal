@@ -15,10 +15,22 @@ const mongodbUri = process.env.MONGODB_URI.trim();
 if (!/^mongodb(\+srv)?:\/\//i.test(mongodbUri)) {
   throw new Error('MONGODB_URI must be a valid mongodb:// or mongodb+srv:// connection URI');
 }
+// Comma-separated so Vercel production and preview origins can both be allowed.
+const frontendOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
+  .split(',').map(origin => origin.trim().replace(/\/$/, '')).filter(Boolean);
+if (!frontendOrigins.length) throw new Error('FRONTEND_ORIGIN must list at least one origin.');
+const nodeEnv = process.env.NODE_ENV || 'development';
+const isProduction = nodeEnv === 'production';
+const cookieSameSite = (process.env.COOKIE_SAMESITE || (isProduction ? 'none' : 'lax')).toLowerCase();
+if (!['lax', 'strict', 'none'].includes(cookieSameSite)) throw new Error('COOKIE_SAMESITE must be lax, strict or none.');
+if (cookieSameSite === 'none' && !isProduction) throw new Error('COOKIE_SAMESITE=none requires HTTPS; set NODE_ENV=production.');
 export const env = {
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv,
   port: Number(process.env.PORT || 4000),
-  frontendOrigin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+  // The first origin is canonical (password-reset links, PayPal return URLs).
+  frontendOrigin: frontendOrigins[0],
+  frontendOrigins,
+  cookieSameSite,
   mongodbUri,
   sessionTtlDays: Math.max(1, Math.min(30, Number(process.env.SESSION_TTL_DAYS || 7))),
   cookieName: process.env.COOKIE_NAME || 'buypal_session',

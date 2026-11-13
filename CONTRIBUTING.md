@@ -108,7 +108,23 @@ PRs may be rejected or sent back for changes if they introduce breaking behavior
 
 ## Local setup
 
-Setup commands will be added when the frontend/backend package structure is committed. Until then, coordinate runtime and package choices in the project discussion and record decisions in `docs/DECISIONS.md`.
+```bash
+# Backend
+cd backend
+cp .env.example .env    # fill in MONGODB_URI, FRONTEND_ORIGIN, PayPal Sandbox credentials
+npm install
+npm test
+npm run dev             # API on http://localhost:4000
+
+# Frontend
+cd frontend
+cp .env.example .env    # VITE_API_URL=http://localhost:4000/api/v1
+npm install
+npm run dev             # app on http://localhost:5173
+npm run build           # production build; requires VITE_API_URL
+```
+
+Deployment targets, exact Vercel settings and environment variables are documented in [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
 ## Maintainer authority
 
