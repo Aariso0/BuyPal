@@ -1,7 +1,8 @@
 # npm
 node_modules/
-package.json
-package-lock.json
+# Local agent tooling at the repository root only; app manifests are tracked.
+/package.json
+/package-lock.json
 
 # Python
 __pycache__/
