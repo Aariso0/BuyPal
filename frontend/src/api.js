@@ -1,7 +1,7 @@
-const DEV_API_URL = "http://localhost:4000/api/v1";
-const API = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? DEV_API_URL : "")).replace(/\/+$/, "");
-if (!API) throw new Error("VITE_API_URL is not set. Set it to your backend base URL (for example https://buypal-api.example.com/api/v1) before building for production.");
+const API = import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
 async function request(path, options = {}) {
+  // `headers` must be merged AFTER spreading `options`; otherwise a call that passes its own headers
+  // (e.g. Send Money's Idempotency-Key) silently drops Content-Type: application/json.
   const response = await fetch(`${API}${path}`, {
     ...options,
     credentials: "include",
@@ -10,18 +10,11 @@ async function request(path, options = {}) {
       ...(options.headers || {})
     }
   });
-
   if (response.status === 204) return null;
-
   const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || `Request failed (${response.status})`);
-  }
-
+  if (!response.ok) throw new Error(data.message || `Request failed (${response.status})`);
   return data;
 }
-
 export const api={
   session:()=>request("/auth/session"),
   register:(body)=>request("/auth/register",{method:"POST",body:JSON.stringify(body)}),
@@ -53,5 +46,11 @@ export const api={
   updatePreferences:(body)=>request('/settings/preferences',{method:'PATCH',body:JSON.stringify(body)}),
   changePassword:(body)=>request('/settings/password',{method:'POST',body:JSON.stringify(body)}),
   sessions:()=>request('/settings/sessions'),
-  revokeSession:(id)=>request(`/settings/sessions/${id}`,{method:'DELETE'})
+  revokeSession:(id)=>request(`/settings/sessions/${id}`,{method:'DELETE'}),
+  aiStatus:()=>request('/ai/status'),
+  aiModels:()=>request('/ai/models'),
+  aiChat:(body)=>request('/ai/chat',{method:'POST',body:JSON.stringify(body)}),
+  aiHistory:()=>request('/ai/history'),
+  aiClearHistory:()=>request('/ai/history',{method:'DELETE'}),
+  aiReview:(body)=>request('/ai/product-review',{method:'POST',body:JSON.stringify(body)})
 };

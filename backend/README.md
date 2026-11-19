@@ -1,6 +1,6 @@
 # BuyPal Core Backend
 
-Node.js 20+ / Express / MongoDB backend for BuyPal's non-AI functionality.
+Node.js 20+ / Express / MongoDB backend for BuyPal (the AI assistant runs as a separate service in `../ai`).
 
 ## Included
 - Account registration, login, logout and session lookup.
@@ -13,8 +13,8 @@ Node.js 20+ / Express / MongoDB backend for BuyPal's non-AI functionality.
 - Security middleware, CORS restrictions, JSON size limits and rate limits.
 - API and setup documentation.
 
-## Explicitly outside this package
-AI/LLM prompts, product search, retailer integrations, product comparison and shopping-agent orchestration are intentionally excluded. Another contributor owns that system. Later it should call the documented BuyPal approval API; it must never bypass backend permission checks.
+## AI shopping assistant (separate service)
+The AI agent lives in `../ai` (Python / FastAPI) and is reached only through `src/routes/ai.routes.js` (`/api/v1/ai/*`), which adds login checks, per-user sessions, validation and rate limits. It never touches wallet, Circle or approval data and must never bypass backend permission checks. See `../ai/README.md` and `docs/API.md`.
 
 ## Requirements
 - Node.js 20 or newer
